@@ -2,7 +2,3 @@ name: HeavyRain
 version: '${project.version}'
 main: tmlust.heavyrain.HeavyRain
 api-version: 1.19
-commands:
-  heavyrain:
-    description: Lista de comandos
-    usage: /<command>
