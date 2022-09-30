@@ -24,7 +24,7 @@ public class CommandMain implements CommandExecutor {
         } else {
             switch(args[0].toLowerCase()){
                 case "startcountdown":
-
+                    // test
                     return true;
                 default:
                     printHelpCommands(sender);
