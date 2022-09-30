@@ -1,0 +1,4 @@
+name: HeavyRain
+version: '${project.version}'
+main: tmlust.heavyrain.HeavyRain
+api-version: 1.19
