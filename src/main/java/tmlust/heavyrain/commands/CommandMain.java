@@ -13,8 +13,11 @@ import tmlust.heavyrain.HeavyRain;
 import tmlust.heavyrain.files.Config;
 import tmlust.heavyrain.files.Data;
 import tmlust.heavyrain.tasks.HeavyRainTask;
+import tmlust.heavyrain.utilities.Utility;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CommandMain implements CommandExecutor {
 
@@ -22,15 +25,15 @@ public class CommandMain implements CommandExecutor {
     private final String commandLabel;
     private final Config config;
     BukkitScheduler scheduler = null;
-    private int secondsTimer;
-    private boolean CounterOn;
+    private long secondsTimer;
+    private boolean CounterOn = false;
+    private long secondsMax;
 
     public CommandMain(HeavyRain plugin){
         this.plugin = plugin;
         commandLabel = plugin.getCommandLabel();
         config = plugin.getConfigFile();
         secondsTimer = 1;
-        CounterOn = false;
     }
 
     @Override
@@ -72,6 +75,37 @@ public class CommandMain implements CommandExecutor {
                 case "reload":
                     config.reload(sender);
                     return true;
+                case "config":
+                    if(args.length == 1) {
+                        printConfigCommands(sender);
+                        return true;
+                    }
+                    switch(args[1].toLowerCase()) {
+                        case "timer":
+                            if(args.length == 2) {
+                                sender.sendMessage(ChatColor.YELLOW + "Ingresa el tiempo en segundos entre cada evento Heavy Rain");
+                                return true;
+                            }
+                            if(Utility.isOnlyNumbers(args[2].toCharArray())){
+                                if(new BigDecimal(args[2]).compareTo(new BigDecimal(9223372036854775807L)) <= 0) {
+                                    secondsMax = Long.parseLong(args[2]);
+                                    sender.sendMessage(ChatColor.GREEN + "Tiempo configurado a cada " + secondsMax + " segundos");
+                                } else {
+                                    sender.sendMessage(ChatColor.DARK_RED + "No puedes ingresar numeros muy grandes");
+                                }
+                            } else {
+                                sender.sendMessage(ChatColor.DARK_RED + "No puedes ingresar letras");
+                            }
+                            return true;
+                        case "info":
+                            if(CounterOn) {
+                                sender.sendMessage(ChatColor.GREEN + "Heavy Rain:" + ChatColor.DARK_GREEN + " Activado");
+                            } else {
+                                sender.sendMessage(ChatColor.GREEN + "Heavy Rain:" + ChatColor.DARK_RED + " Desactivado");
+                            }
+                            sender.sendMessage(ChatColor.GREEN + "Tiempo entre eventos: " + ChatColor.YELLOW + secondsMax);
+                            return true;
+                    }
                 default:
                     printHelpCommands(sender);
                     return true;
@@ -94,13 +128,27 @@ public class CommandMain implements CommandExecutor {
         }
     }
 
+    private void printConfigCommands(CommandSender sender){
+        if(sender instanceof Player){
+            Player player = (Player) sender;
+            for(String s : getListStringConfigCommands()){
+                player.sendMessage(s);
+            }
+            player.playSound(player, Sound.BLOCK_ANVIL_PLACE, 1, 2);
+        } else {
+            ConsoleCommandSender console = (ConsoleCommandSender) sender;
+            for(String s : getListStringConfigCommands()){
+                console.sendMessage(s);
+            }
+        }
+    }
+
     public void startTimer() {
+
         scheduler = plugin.getServer().getScheduler();
         scheduler.runTaskTimer(plugin, () -> {
-            System.out.println(secondsTimer);
             secondsTimer++;
-
-            if(secondsTimer > plugin.getConfigFile().getConfigFile().getInt("countdown")){
+            if(secondsTimer > secondsMax){
                 BukkitTask heavyRainTask = new HeavyRainTask(plugin).runTask(plugin);
                 secondsTimer = 1;
             }
@@ -109,18 +157,28 @@ public class CommandMain implements CommandExecutor {
 
     public void stopTimer() {
         scheduler.cancelTasks(plugin);
-        Data dat = new Data(CounterOn, secondsTimer);
+        Data dat = new Data(CounterOn, secondsTimer, secondsMax);
         dat.saveData("heavyrain.dat");
     }
 
-    private ArrayList<String> getListStringHelpCommands(){
-        ArrayList<String> stringHelpCommands = new ArrayList<>();
+    private List<String> getListStringHelpCommands(){
+        List<String> stringHelpCommands = new ArrayList<>();
 
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + ": " + ChatColor.GREEN + "Obten la lista de comandos.");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " reload: " + ChatColor.GREEN + "Recarga las configuraciones.");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " timer (on/off): " + ChatColor.GREEN + "Inicia la cuenta atras de la Heavy Rain.");
+        stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config: " + ChatColor.GREEN + "Obten la lista de comandos de configuracion");
 
         return stringHelpCommands;
+    }
+
+    private List<String> getListStringConfigCommands() {
+        List<String> stringConfigCommands = new ArrayList<>();
+
+        stringConfigCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config info: " + ChatColor.GREEN + "Obten informacion de la configuracion del plugin");
+        stringConfigCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config timer (seconds): " + ChatColor.GREEN + "Cambia el tiempo entre cada evento de HeavyRain");
+
+        return stringConfigCommands;
     }
 
     public boolean isCounterOn() {
@@ -131,12 +189,19 @@ public class CommandMain implements CommandExecutor {
         CounterOn = counterOn;
     }
 
-    public int getSecondsTimer() {
+    public long getSecondsTimer() {
         return secondsTimer;
     }
 
-    public void setSecondsTimer(int secondsTimer) {
+    public void setSecondsTimer(long secondsTimer) {
         this.secondsTimer = secondsTimer;
     }
 
+    public long getSecondsMax() {
+        return secondsMax;
+    }
+
+    public void setSecondsMax(long secondsMax) {
+        this.secondsMax = secondsMax;
+    }
 }

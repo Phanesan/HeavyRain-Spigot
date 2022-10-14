@@ -23,6 +23,7 @@ public class HeavyRain extends JavaPlugin {
 			dat = Data.loadData("heavyrain.dat");
 			commands.setCounterOn(dat.counterOn);
 			commands.setSecondsTimer(dat.secondsTimer);
+			commands.setSecondsMax(dat.secondsMax);
 		}
 	}
 
@@ -35,6 +36,7 @@ public class HeavyRain extends JavaPlugin {
 		//Commands setup
 		CommandsSetup();
 
+		// Scheduler timer
 		if(commands.isCounterOn()) {
 			commands.startTimer();
 		}
@@ -43,7 +45,7 @@ public class HeavyRain extends JavaPlugin {
 	@Override
 	public void onDisable() {
 
-		Data dat = new Data(commands.isCounterOn(), commands.getSecondsTimer());
+		Data dat = new Data(commands.isCounterOn(), commands.getSecondsTimer(), commands.getSecondsMax());
 		dat.saveData("heavyrain.dat");
 
 	}

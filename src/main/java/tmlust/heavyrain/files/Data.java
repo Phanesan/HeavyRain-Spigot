@@ -15,11 +15,13 @@ public class Data implements Serializable {
 
     private static transient final long serialVersionUID = 1L;
     public boolean counterOn;
-    public int secondsTimer;
+    public long secondsTimer;
+    public long secondsMax;
 
-    public Data(boolean counterOn, int secondsTimer){
+    public Data(boolean counterOn, long secondsTimer, long secondsMax){
         this.counterOn = counterOn;
         this.secondsTimer = secondsTimer;
+        this.secondsMax = secondsMax;
     }
 
     public boolean saveData(String filePath){
