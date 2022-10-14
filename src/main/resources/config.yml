@@ -1,2 +1,5 @@
-test: "default"
-number: 10
+############## General Config ##############
+
+# Tiempo en segundos entre cada evento de Heavy Rain
+countdown: 43200
+message: "here"
