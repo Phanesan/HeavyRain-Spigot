@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import tmlust.heavyrain.HeavyRain;
@@ -24,7 +25,7 @@ public class CommandMain implements CommandExecutor {
     private final HeavyRain plugin;
     private final String commandLabel;
     private final Config config;
-    BukkitScheduler scheduler = null;
+    BukkitTask timer;
     private long secondsTimer;
     private boolean CounterOn = false;
     private long secondsMax;
@@ -144,19 +145,20 @@ public class CommandMain implements CommandExecutor {
     }
 
     public void startTimer() {
-
-        scheduler = plugin.getServer().getScheduler();
-        scheduler.runTaskTimer(plugin, () -> {
-            secondsTimer++;
-            if(secondsTimer > secondsMax){
-                BukkitTask heavyRainTask = new HeavyRainTask(plugin).runTask(plugin);
-                secondsTimer = 1;
+        timer = new BukkitRunnable() {
+            @Override
+            public void run() {
+                secondsTimer++;
+                if(secondsTimer > secondsMax){
+                    BukkitTask heavyRainTask = new HeavyRainTask(plugin).runTask(plugin);
+                    secondsTimer = 1;
+                }
             }
-        }, 0, 20);
+        }.runTaskTimer(plugin, 0, 20);
     }
 
     public void stopTimer() {
-        scheduler.cancelTasks(plugin);
+        timer.cancel();
         Data dat = new Data(CounterOn, secondsTimer, secondsMax);
         dat.saveData("heavyrain.dat");
     }
