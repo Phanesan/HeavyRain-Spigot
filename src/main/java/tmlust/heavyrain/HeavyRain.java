@@ -8,12 +8,9 @@ import tmlust.heavyrain.files.Data;
 import java.io.File;
 
 public class HeavyRain extends JavaPlugin {
-	// Variables de la clase
 	private final String commandLabel = "heavyrain";
-
-	// Objetos de clase
-	Config config = new Config(this);
-	CommandMain commands = new CommandMain(this);
+	private Config config = new Config(this);
+	private CommandMain commands = new CommandMain(this);
 
 	@Override
 	public void onLoad() {

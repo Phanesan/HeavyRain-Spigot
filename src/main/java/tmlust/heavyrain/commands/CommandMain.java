@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import tmlust.heavyrain.HeavyRain;
 import tmlust.heavyrain.files.Config;
@@ -166,10 +165,12 @@ public class CommandMain implements CommandExecutor {
     private List<String> getListStringHelpCommands(){
         List<String> stringHelpCommands = new ArrayList<>();
 
+        stringHelpCommands.add(ChatColor.DARK_GREEN + "=========================================");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + ": " + ChatColor.GREEN + "Obten la lista de comandos.");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " reload: " + ChatColor.GREEN + "Recarga las configuraciones.");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " timer (on/off): " + ChatColor.GREEN + "Inicia la cuenta atras de la Heavy Rain.");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config: " + ChatColor.GREEN + "Obten la lista de comandos de configuracion");
+        stringHelpCommands.add(ChatColor.DARK_GREEN + "=========================================");
 
         return stringHelpCommands;
     }
@@ -177,8 +178,10 @@ public class CommandMain implements CommandExecutor {
     private List<String> getListStringConfigCommands() {
         List<String> stringConfigCommands = new ArrayList<>();
 
+        stringConfigCommands.add(ChatColor.DARK_GREEN + "=========================================");
         stringConfigCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config info: " + ChatColor.GREEN + "Obten informacion de la configuracion del plugin");
         stringConfigCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config timer (seconds): " + ChatColor.GREEN + "Cambia el tiempo entre cada evento de HeavyRain");
+        stringConfigCommands.add(ChatColor.DARK_GREEN + "=========================================");
 
         return stringConfigCommands;
     }
