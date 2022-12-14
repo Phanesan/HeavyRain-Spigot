@@ -16,7 +16,9 @@ import tmlust.heavyrain.tasks.HeavyRainTask;
 import tmlust.heavyrain.utilities.Utility;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CommandMain implements CommandExecutor {
@@ -89,7 +91,8 @@ public class CommandMain implements CommandExecutor {
                             if(Utility.isOnlyNumbers(args[2].toCharArray())){
                                 if(new BigDecimal(args[2]).compareTo(new BigDecimal(9223372036854775807L)) <= 0) {
                                     secondsMax = Long.parseLong(args[2]);
-                                    sender.sendMessage(ChatColor.GREEN + "Tiempo configurado a cada " + secondsMax + " segundos");
+                                    String format = String.format("%02dh %02dm %02ds", secondsMax / 3600, (secondsMax % 3600) / 60, secondsMax % 60);
+                                    sender.sendMessage(ChatColor.GREEN + "Tiempo configurado a cada " + format + ".");
                                 } else {
                                     sender.sendMessage(ChatColor.DARK_RED + "No puedes ingresar numeros muy grandes");
                                 }
