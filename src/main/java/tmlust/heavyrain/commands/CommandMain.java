@@ -16,9 +16,7 @@ import tmlust.heavyrain.tasks.HeavyRainTask;
 import tmlust.heavyrain.utilities.Utility;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class CommandMain implements CommandExecutor {
@@ -134,13 +132,13 @@ public class CommandMain implements CommandExecutor {
     private void printConfigCommands(CommandSender sender){
         if(sender instanceof Player){
             Player player = (Player) sender;
-            for(String s : getListStringConfigCommands()){
+            for(String s : getListStringConfigHelpCommands()){
                 player.sendMessage(s);
             }
             player.playSound(player, Sound.BLOCK_ANVIL_PLACE, 1, 2);
         } else {
             ConsoleCommandSender console = (ConsoleCommandSender) sender;
-            for(String s : getListStringConfigCommands()){
+            for(String s : getListStringConfigHelpCommands()){
                 console.sendMessage(s);
             }
         }
@@ -178,7 +176,7 @@ public class CommandMain implements CommandExecutor {
         return stringHelpCommands;
     }
 
-    private List<String> getListStringConfigCommands() {
+    private List<String> getListStringConfigHelpCommands() {
         List<String> stringConfigCommands = new ArrayList<>();
 
         stringConfigCommands.add(ChatColor.DARK_GREEN + "=========================================");

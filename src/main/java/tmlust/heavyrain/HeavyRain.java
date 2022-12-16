@@ -2,6 +2,7 @@ package tmlust.heavyrain;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import tmlust.heavyrain.commands.CommandMain;
+import tmlust.heavyrain.commands.TabCompleter;
 import tmlust.heavyrain.files.Config;
 import tmlust.heavyrain.files.Data;
 
@@ -51,7 +52,8 @@ public class HeavyRain extends JavaPlugin {
 		return commandLabel;
 	}
 	public void CommandsSetup(){
-		this.getCommand("heavyrain").setExecutor(commands);
+		getCommand("heavyrain").setExecutor(commands);
+		getCommand("heavyrain").setTabCompleter(new TabCompleter());
 	}
 	public Config getConfigFile(){
 		return config;
