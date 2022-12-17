@@ -7,21 +7,32 @@ import tmlust.heavyrain.files.Config;
 import tmlust.heavyrain.files.Data;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 public class HeavyRain extends JavaPlugin {
 	private final String commandLabel = "heavyrain";
-	private Config config = new Config(this);
-	private CommandMain commands = new CommandMain(this);
+	private final Config config = new Config(this);
+	private final CommandMain commands = new CommandMain(this);
+	private final Logger logger = getLogger();
 
 	@Override
 	public void onLoad() {
-		File fileDat = new File(getDataFolder().getAbsolutePath() + "/heavyrain.dat");
 		Data dat;
-		if(fileDat.exists()) {
-			dat = Data.loadData("heavyrain.dat");
-			commands.setCounterOn(dat.counterOn);
-			commands.setSecondsTimer(dat.secondsTimer);
-			commands.setSecondsMax(dat.secondsMax);
+		try {
+			dat = Data.loadData(this, "/HeavyRainData.json");
+			if(dat != null){
+				commands.setCounterEnabled(dat.counterEnabled);
+				commands.setSecondsTimer(dat.secondsTimer);
+				commands.setSecondsMax(dat.secondsMax);
+				logger.info("Datos cargados con exito!");
+			}
+		} catch (FileNotFoundException e) {
+			logger.info("No se encontraron datos guardados, se cargaran los datos por defecto.");
+			commands.setCounterEnabled(false);
+			commands.setSecondsTimer(1);
+			commands.setSecondsMax(28800); // 8 horas
 		}
 	}
 
@@ -35,17 +46,22 @@ public class HeavyRain extends JavaPlugin {
 		CommandsSetup();
 
 		// Scheduler timer
-		if(commands.isCounterOn()) {
+		if(commands.isCounterEnabled()) {
 			commands.startTimer();
 		}
 	}
 
 	@Override
 	public void onDisable() {
-
-		Data dat = new Data(commands.isCounterOn(), commands.getSecondsTimer(), commands.getSecondsMax());
-		dat.saveData("heavyrain.dat");
-
+		File file = new File(this.getDataFolder().getAbsolutePath() + "/HeavyRainData.json");
+		if(file.exists()) {
+			Data dat = new Data(commands.isCounterEnabled(), commands.getSecondsTimer(), commands.getSecondsMax());
+			try {
+				dat.saveData(this, "/HeavyRainData.json");
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	public String getCommandLabel() {

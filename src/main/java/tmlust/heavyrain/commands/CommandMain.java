@@ -15,6 +15,8 @@ import tmlust.heavyrain.files.Data;
 import tmlust.heavyrain.tasks.HeavyRainTask;
 import tmlust.heavyrain.utilities.Utility;
 
+import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +26,20 @@ public class CommandMain implements CommandExecutor {
     private final HeavyRain plugin;
     private final String commandLabel;
     private final Config config;
-    BukkitTask timer;
+    private BukkitTask timer;
     private long secondsTimer;
-    private boolean CounterOn = false;
+    private boolean CounterEnabled;
     private long secondsMax;
 
     public CommandMain(HeavyRain plugin){
         this.plugin = plugin;
         commandLabel = plugin.getCommandLabel();
         config = plugin.getConfigFile();
-        secondsTimer = 1;
+        //secondsTimer = 1;
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
 
         if(args.length == 0){
             printHelpCommands(sender);
@@ -46,13 +48,14 @@ public class CommandMain implements CommandExecutor {
             switch(args[0].toLowerCase()){
                 case "timer":
                     if(args.length == 1) {
-                        printHelpCommands(sender);
+                        sender.sendMessage(ChatColor.YELLOW + "Ingresa " + ChatColor.DARK_GREEN + "on" + ChatColor.YELLOW + " para activar el contador, " +
+                        "Ingresa " + ChatColor.DARK_RED + "off" + ChatColor.YELLOW + " para desactivar el contador");
                         return true;
                     }
                     switch(args[1].toLowerCase()){
                         case "on":
-                            if(!CounterOn) {
-                                CounterOn = true;
+                            if(!CounterEnabled) {
+                                CounterEnabled = true;
                                 sender.sendMessage(ChatColor.GREEN + "El contador de la Heavy Rain ha sido iniciado");
                                 startTimer();
                             } else {
@@ -60,8 +63,8 @@ public class CommandMain implements CommandExecutor {
                             }
                             return true;
                         case "off":
-                            if(CounterOn) {
-                                CounterOn = false;
+                            if(CounterEnabled) {
+                                CounterEnabled = false;
                                 sender.sendMessage(ChatColor.GREEN + "El contador de la Heavy Rain ha sido detenido");
                                 stopTimer();
                             } else {
@@ -99,12 +102,20 @@ public class CommandMain implements CommandExecutor {
                             }
                             return true;
                         case "info":
-                            if(CounterOn) {
+                            String format;
+
+                            if(CounterEnabled) {
                                 sender.sendMessage(ChatColor.GREEN + "Heavy Rain:" + ChatColor.DARK_GREEN + " Activado");
                             } else {
                                 sender.sendMessage(ChatColor.GREEN + "Heavy Rain:" + ChatColor.DARK_RED + " Desactivado");
                             }
-                            sender.sendMessage(ChatColor.GREEN + "Tiempo entre eventos: " + ChatColor.YELLOW + secondsMax);
+
+                            format = String.format("%02dh %02dm %02ds", secondsMax / 3600, (secondsMax % 3600) / 60, secondsMax % 60);
+                            sender.sendMessage(ChatColor.GREEN + "Tiempo entre eventos: " + ChatColor.YELLOW + format);
+
+                            long secondsRemaining = secondsMax - secondsTimer;
+                            format = String.format("%02dh %02dm %02ds", secondsRemaining / 3600, (secondsRemaining % 3600) / 60, secondsRemaining % 60);
+                            sender.sendMessage(ChatColor.GREEN + "Tiempo faltante: " + ChatColor.YELLOW + format);
                             return true;
                     }
                 default:
@@ -150,7 +161,7 @@ public class CommandMain implements CommandExecutor {
             public void run() {
                 secondsTimer++;
                 if(secondsTimer > secondsMax){
-                    BukkitTask heavyRainTask = new HeavyRainTask(plugin).runTask(plugin);
+                    new HeavyRainTask(plugin).runTask(plugin);
                     secondsTimer = 1;
                 }
             }
@@ -159,8 +170,12 @@ public class CommandMain implements CommandExecutor {
 
     public void stopTimer() {
         timer.cancel();
-        Data dat = new Data(CounterOn, secondsTimer, secondsMax);
-        dat.saveData("heavyrain.dat");
+        Data dat = new Data(CounterEnabled, secondsTimer, secondsMax);
+        try {
+            dat.saveData(plugin, "/HeavyRainData.json");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private List<String> getListStringHelpCommands(){
@@ -187,12 +202,12 @@ public class CommandMain implements CommandExecutor {
         return stringConfigCommands;
     }
 
-    public boolean isCounterOn() {
-        return CounterOn;
+    public boolean isCounterEnabled() {
+        return CounterEnabled;
     }
 
-    public void setCounterOn(boolean counterOn) {
-        CounterOn = counterOn;
+    public void setCounterEnabled(boolean counterEnabled) {
+        CounterEnabled = counterEnabled;
     }
 
     public long getSecondsTimer() {

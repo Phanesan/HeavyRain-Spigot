@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class Config {
 
-    private Plugin plugin = null;
+    private final Plugin plugin;
     // Config file
     private FileConfiguration config;
     private File configFile;

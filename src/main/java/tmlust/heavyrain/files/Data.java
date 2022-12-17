@@ -1,51 +1,39 @@
 package tmlust.heavyrain.files;
 
-import org.bukkit.Bukkit;
-import org.bukkit.util.io.BukkitObjectInputStream;
-import org.bukkit.util.io.BukkitObjectOutputStream;
+import com.google.gson.Gson;
+import tmlust.heavyrain.HeavyRain;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+import java.io.*;
 
 public class Data implements Serializable {
 
-    private static transient final long serialVersionUID = 1L;
-    public boolean counterOn;
+    private transient final long serialVersionUID = -5971835126318915170L;
+    public boolean counterEnabled;
     public long secondsTimer;
     public long secondsMax;
 
-    public Data(boolean counterOn, long secondsTimer, long secondsMax){
-        this.counterOn = counterOn;
+    public Data(boolean counterEnabled, long secondsTimer, long secondsMax){
+        this.counterEnabled = counterEnabled;
         this.secondsTimer = secondsTimer;
         this.secondsMax = secondsMax;
     }
 
-    public boolean saveData(String filePath){
-        try {
-            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(Bukkit.getServer().getPluginManager().getPlugin("HeavyRain").getDataFolder().getAbsolutePath() + "/" + filePath)));
-            out.writeObject(this);
-            out.close();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
+    public void saveData(HeavyRain instance, String filePath) throws IOException {
+        Gson gson = new Gson();
+        File file = new File(instance.getDataFolder().getAbsolutePath() + filePath);
+        file.getParentFile().mkdir();
+        file.createNewFile();
+        Writer writer = new FileWriter(file, false);
+        gson.toJson(this, writer);
+        writer.flush();
+        writer.close();
     }
 
-    public static Data loadData(String filePath) {
-        try {
-            BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(Bukkit.getServer().getPluginManager().getPlugin("HeavyRain").getDataFolder().getAbsolutePath() + "/"  + filePath)));
-            Data data = (Data) in.readObject();
-            in.close();
-            return data;
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public static Data loadData(HeavyRain instance, String filePath) throws FileNotFoundException {
+        Gson gson = new Gson();
+        File file = new File(instance.getDataFolder().getAbsolutePath() + filePath);
+        Reader reader = new FileReader(file);
+        return gson.fromJson(reader, Data.class);
     }
 
 }
