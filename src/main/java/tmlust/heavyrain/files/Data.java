@@ -11,11 +11,13 @@ public class Data implements Serializable {
     public boolean counterEnabled;
     public long secondsTimer;
     public long secondsMax;
+    public boolean HeavyRainActivated;
 
-    public Data(boolean counterEnabled, long secondsTimer, long secondsMax){
+    public Data(boolean counterEnabled, long secondsTimer, long secondsMax, boolean HeavyRainActivated){
         this.counterEnabled = counterEnabled;
         this.secondsTimer = secondsTimer;
         this.secondsMax = secondsMax;
+        this.HeavyRainActivated = HeavyRainActivated;
     }
 
     public void saveData(HeavyRain instance, String filePath) throws IOException {

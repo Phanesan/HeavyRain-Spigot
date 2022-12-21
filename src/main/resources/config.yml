@@ -1,2 +1,6 @@
 ############## General Config ##############
 
+# Los mundos principales donde sera afectada la Heavy Rain
+heavyrain_world: "world"
+heavyrain_world_nether: "world_nether"
+heavyrain_world_the_end: "world_the_end"

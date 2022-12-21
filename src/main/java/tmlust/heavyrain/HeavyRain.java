@@ -1,8 +1,11 @@
 package tmlust.heavyrain;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import tmlust.heavyrain.commands.CommandDebug;
 import tmlust.heavyrain.commands.CommandMain;
 import tmlust.heavyrain.commands.TabCompleter;
+import tmlust.heavyrain.events.EventCancel;
 import tmlust.heavyrain.files.Config;
 import tmlust.heavyrain.files.Data;
 
@@ -26,6 +29,7 @@ public class HeavyRain extends JavaPlugin {
 				commands.setCounterEnabled(dat.counterEnabled);
 				commands.setSecondsTimer(dat.secondsTimer);
 				commands.setSecondsMax(dat.secondsMax);
+				commands.setHeavyRainActivated(dat.HeavyRainActivated);
 				logger.info("Datos cargados con exito!");
 			}
 		} catch (FileNotFoundException e) {
@@ -33,6 +37,7 @@ public class HeavyRain extends JavaPlugin {
 			commands.setCounterEnabled(false);
 			commands.setSecondsTimer(1);
 			commands.setSecondsMax(28800); // 8 horas
+			commands.setHeavyRainActivated(false);
 		}
 	}
 
@@ -45,9 +50,15 @@ public class HeavyRain extends JavaPlugin {
 		//Commands setup
 		CommandsSetup();
 
+		// Events
+		Bukkit.getPluginManager().registerEvents(new EventCancel(this),this);
+
 		// Scheduler timer
 		if(commands.isCounterEnabled()) {
 			commands.startTimer();
+		}
+		if(commands.isHeavyRainActivated()) {
+			Threads.startLoop(this);
 		}
 	}
 
@@ -55,7 +66,7 @@ public class HeavyRain extends JavaPlugin {
 	public void onDisable() {
 		File file = new File(this.getDataFolder().getAbsolutePath() + "/HeavyRainData.json");
 		if(file.exists()) {
-			Data dat = new Data(commands.isCounterEnabled(), commands.getSecondsTimer(), commands.getSecondsMax());
+			Data dat = new Data(commands.isCounterEnabled(), commands.getSecondsTimer(), commands.getSecondsMax(), commands.isHeavyRainActivated());
 			try {
 				dat.saveData(this, "/HeavyRainData.json");
 			} catch (IOException e) {
@@ -70,8 +81,15 @@ public class HeavyRain extends JavaPlugin {
 	public void CommandsSetup(){
 		getCommand("heavyrain").setExecutor(commands);
 		getCommand("heavyrain").setTabCompleter(new TabCompleter());
+		getCommand("heavyraind").setExecutor(new CommandDebug(this));
 	}
 	public Config getConfigFile(){
 		return config;
+	}
+	public Logger getLoggerPlugin() {
+		return logger;
+	}
+	public CommandMain getCommands() {
+		return commands;
 	}
 }
