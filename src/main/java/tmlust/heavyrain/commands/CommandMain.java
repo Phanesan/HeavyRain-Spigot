@@ -52,7 +52,7 @@ public class CommandMain implements CommandExecutor {
             return true;
         } else {
             switch(args[0].toLowerCase()){
-                case "timer":
+                case "enable":
                     if(args.length == 1) {
                         sender.sendMessage(ChatColor.YELLOW + "Ingresa " + ChatColor.DARK_GREEN + "on" + ChatColor.YELLOW + " para activar el contador, " +
                         "Ingresa " + ChatColor.DARK_RED + "off" + ChatColor.YELLOW + " para desactivar el contador");
@@ -90,7 +90,7 @@ public class CommandMain implements CommandExecutor {
                         return true;
                     }
                     switch(args[1].toLowerCase()) {
-                        case "timer":
+                        case "each":
                             if(args.length == 2) {
                                 sender.sendMessage(ChatColor.YELLOW + "Ingresa el tiempo en segundos entre cada evento Heavy Rain");
                                 return true;
@@ -135,6 +135,22 @@ public class CommandMain implements CommandExecutor {
                                 sender.sendMessage(ChatColor.GREEN + "La Heavy Rain iniciara en " + ChatColor.YELLOW + format);
                             }
                             sender.sendMessage(ChatColor.DARK_GREEN + "=========================================");
+                            return true;
+                        case "time":
+                            if(args.length == 2) {
+                                sender.sendMessage(ChatColor.YELLOW + "Cambia el tiempo transcurrido a la proxima Heavy Rain");
+                                return true;
+                            }
+                            if(Integer.parseInt(args[2]) >= 0 && Integer.parseInt(args[2]) <= secondsMax) {
+                                plugin.getCommands().setSecondsTimer(Long.parseLong(args[2]));
+
+                                long secondsRemaining = secondsMax - secondsTimer;
+                                format = String.format("%02dh %02dm %02ds", secondsRemaining / 3600, (secondsRemaining % 3600) / 60, secondsRemaining % 60);
+
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&aTiempo cambiado, ahora faltan &b" + format + "&a para iniciar la Heavy Rain"));
+                            } else {
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&cNo puedes ingresar un valor mayor a " + secondsMax + " o menor a 0"));
+                            }
                             return true;
                     }
                 default:
@@ -271,7 +287,7 @@ public class CommandMain implements CommandExecutor {
         stringHelpCommands.add(ChatColor.DARK_GREEN + "=========================================");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + ": " + ChatColor.GREEN + "Obten la lista de comandos.");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " reload: " + ChatColor.GREEN + "Recarga las configuraciones.");
-        stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " timer (on/off): " + ChatColor.GREEN + "Inicia la cuenta atras de la Heavy Rain.");
+        stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " enable (on/off): " + ChatColor.GREEN + "Inicia la cuenta atras de la Heavy Rain.");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config: " + ChatColor.GREEN + "Obten la lista de comandos de configuracion");
         stringHelpCommands.add(ChatColor.DARK_GREEN + "=========================================");
 
@@ -283,13 +299,12 @@ public class CommandMain implements CommandExecutor {
 
         stringConfigCommands.add(ChatColor.DARK_GREEN + "=========================================");
         stringConfigCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config info: " + ChatColor.GREEN + "Obten informacion de la configuracion del plugin");
-        stringConfigCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config timer (seconds): " + ChatColor.GREEN + "Cambia el tiempo entre cada evento de HeavyRain");
+        stringConfigCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config each (seconds): " + ChatColor.GREEN + "Cambia el tiempo entre cada evento de Heavy Rain");
+        stringConfigCommands.add(ChatColor.DARK_GREEN + "/" + commandLabel + " config time (seconds): " + ChatColor.GREEN + "Cambia el tiempo transcurrido a la proxima Heavy Rain");
         stringConfigCommands.add(ChatColor.DARK_GREEN + "=========================================");
 
         return stringConfigCommands;
     }
-
-
 
     public boolean isCounterEnabled() {
         return CounterEnabled;

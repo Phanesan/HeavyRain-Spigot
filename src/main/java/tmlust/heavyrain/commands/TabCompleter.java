@@ -15,7 +15,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
 
             List<String> arguments = new ArrayList<>();
             arguments.add("reload");
-            arguments.add("timer");
+            arguments.add("enable");
             arguments.add("config");
 
             return checkArgs(args, 0, arguments);
@@ -33,7 +33,8 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
 
                 List<String> arguments = new ArrayList<>();
                 arguments.add("info");
-                arguments.add("timer");
+                arguments.add("each");
+                arguments.add("time");
 
                 return checkArgs(args, 1, arguments);
 
