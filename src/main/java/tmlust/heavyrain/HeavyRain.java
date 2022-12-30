@@ -4,9 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import tmlust.heavyrain.commands.CommandMain;
 import tmlust.heavyrain.commands.TabCompleter;
-import tmlust.heavyrain.events.EventCancel;
+import tmlust.heavyrain.listeners.ListenerCancel;
+import tmlust.heavyrain.listeners.ListenerMobSpawn;
 import tmlust.heavyrain.files.Config;
 import tmlust.heavyrain.files.Data;
+import tmlust.heavyrain.listeners.ListenerMob;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,8 +51,10 @@ public class HeavyRain extends JavaPlugin {
 		//Commands setup
 		CommandsSetup();
 
-		// Events
-		Bukkit.getPluginManager().registerEvents(new EventCancel(this),this);
+		// Listeners
+		Bukkit.getPluginManager().registerEvents(new ListenerCancel(this),this);
+		Bukkit.getPluginManager().registerEvents(new ListenerMobSpawn(this), this);
+		Bukkit.getPluginManager().registerEvents(new ListenerMob(this), this);
 
 		// Scheduler timer
 		if(commands.isCounterEnabled()) {

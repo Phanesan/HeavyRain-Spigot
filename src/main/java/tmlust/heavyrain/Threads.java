@@ -29,7 +29,7 @@ public abstract class Threads {
             World world_the_end = Utility.findWorldConfig(instance,"heavyrain_world_the_end");
             @Override
             public void run() {
-                System.out.println("Thread-Loop");
+                //System.out.println("Thread-Loop");
                 world.setTime(21600);
                 world.setStorm(true);
                 world.setThundering(true);

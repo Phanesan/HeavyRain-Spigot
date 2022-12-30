@@ -22,7 +22,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
 
         } else if(args.length == 2) {
 
-            if(args[0].equalsIgnoreCase("timer")) {
+            if(args[0].equalsIgnoreCase("enable")) {
                 List<String> arguments = new ArrayList<>();
                 arguments.add("on");
                 arguments.add("off");

@@ -1,4 +1,4 @@
-package tmlust.heavyrain.events;
+package tmlust.heavyrain.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
@@ -6,11 +6,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import tmlust.heavyrain.HeavyRain;
 
-public class EventCancel implements Listener {
+public class ListenerCancel implements Listener {
 
     HeavyRain instance;
 
-    public EventCancel(HeavyRain instance) {
+    public ListenerCancel(HeavyRain instance) {
         this.instance = instance;
     }
 

@@ -238,7 +238,7 @@ public class CommandMain implements CommandExecutor {
                                 public void run() {
                                     world.setStorm(true);
                                     world.setThundering(false);
-                                    System.out.println("Thread-prehr");
+                                    //System.out.println("Thread-prehr");
                                     if(HeavyRainActivated)
                                         prehr.cancel();
                                 }

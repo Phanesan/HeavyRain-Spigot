@@ -22,7 +22,7 @@ public class HeavyRainTask extends BukkitRunnable {
     public void run() {
 
         instance.getCommands().setHeavyRainActivated(true);
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "HEAVYRAIN INICIADA!!");
+        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "HEAVYRAIN INICIADA! ");
         List<Player> players = Utility.getConfigWorldsPlayers(instance,"heavyrain_world","heavyrain_world_nether","heavyrain_world_the_end");
 
         for(Player p : players) {
@@ -33,6 +33,8 @@ public class HeavyRainTask extends BukkitRunnable {
                     "aparezcan jefes en alguna zona aleatoria de\n" +
                     "tus alrededores, encuentralos y hazte con sus\n" +
                     "objetos. ¡MUCHA SUERTE!"));
+
+            p.sendTitle(ChatColor.translateAlternateColorCodes('&',"&4&lHEAVY RAIN"),ChatColor.translateAlternateColorCodes('&',"&cEL CIELO HA OSCURECIDO"), 40,100,30);
 
             p.playSound(p, Sound.ENTITY_ENDER_DRAGON_DEATH,1,0.6F);
 
