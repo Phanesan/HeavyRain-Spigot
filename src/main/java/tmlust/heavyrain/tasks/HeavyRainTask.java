@@ -34,7 +34,7 @@ public class HeavyRainTask extends BukkitRunnable {
                     "tus alrededores, encuentralos y hazte con sus\n" +
                     "objetos. ¡MUCHA SUERTE!"));
 
-            p.sendTitle(ChatColor.translateAlternateColorCodes('&',"&4&lHEAVY RAIN"),ChatColor.translateAlternateColorCodes('&',"&cEL CIELO HA OSCURECIDO"), 40,100,30);
+            p.sendTitle(ChatColor.translateAlternateColorCodes('&',"&4&lHEAVY RAIN"),ChatColor.translateAlternateColorCodes('&',"&cEL CIELO HA OSCURECIDO"), 60,100,60);
 
             p.playSound(p, Sound.ENTITY_ENDER_DRAGON_DEATH,1,0.6F);
 

@@ -2,12 +2,19 @@ package tmlust.heavyrain.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import tmlust.heavyrain.HeavyRain;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class TabCompleter implements org.bukkit.command.TabCompleter {
+
+    private HeavyRain instance;
+
+    public TabCompleter(HeavyRain instance) {
+        this.instance = instance;
+    }
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
 
@@ -17,6 +24,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             arguments.add("reload");
             arguments.add("enable");
             arguments.add("config");
+            arguments.add("give");
 
             return checkArgs(args, 0, arguments);
 
@@ -37,6 +45,10 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
                 arguments.add("time");
 
                 return checkArgs(args, 1, arguments);
+
+            } else if (args[0].equalsIgnoreCase("give")) {
+
+                return instance.getItems().getListItem();
 
             }
         }

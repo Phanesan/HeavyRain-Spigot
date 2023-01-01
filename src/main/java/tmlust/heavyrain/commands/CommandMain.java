@@ -153,6 +153,33 @@ public class CommandMain implements CommandExecutor {
                             }
                             return true;
                     }
+                case "give":
+                    if(args.length == 1) {
+                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&eIngresa el nombre del objeto"));
+                        return true;
+                    } else {
+                        Player p = (Player) sender;
+                        switch(args[1].toLowerCase()) {
+                            case "omnifire":
+                                p.getInventory().addItem(plugin.getItems().OmniFire);
+                                return true;
+                            case "shardoffire":
+                                p.getInventory().addItem(plugin.getItems().ShardOfFire);
+                                return true;
+                            case "writinglife":
+                                p.getInventory().addItem(plugin.getItems().WritingLife);
+                                return true;
+                            case "arcanebooklife":
+                                p.getInventory().addItem(plugin.getItems().ArcaneBookLife);
+                                return true;
+                            case "kingslimecore":
+                                p.getInventory().addItem(plugin.getItems().KingSlimeCore);
+                                return true;
+                            default:
+                                p.sendMessage(ChatColor.translateAlternateColorCodes('&',"&cNo existe ese objeto"));
+                        }
+                    }
+                    return true;
                 default:
                     printHelpCommands(sender);
                     return true;

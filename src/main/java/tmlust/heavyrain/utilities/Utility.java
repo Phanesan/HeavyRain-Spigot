@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utility {
+public abstract class Utility {
 
     public static boolean isOnlyNumbers(char[] s) {
         for (char c : s) {
@@ -48,6 +48,10 @@ public class Utility {
             return w;
         } else
             throw new RuntimeException("Algo salio mal y no se encontro el mundo " + configString);
+    }
+
+    public static boolean randomBoolean(double probability) {
+        return (Math.random()) < (probability/100);
     }
 
 }

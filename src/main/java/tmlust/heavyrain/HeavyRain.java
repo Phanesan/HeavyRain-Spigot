@@ -5,6 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tmlust.heavyrain.commands.CommandMain;
 import tmlust.heavyrain.commands.TabCompleter;
 import tmlust.heavyrain.listeners.ListenerCancel;
+import tmlust.heavyrain.listeners.ListenerMobDeath;
 import tmlust.heavyrain.listeners.ListenerMobSpawn;
 import tmlust.heavyrain.files.Config;
 import tmlust.heavyrain.files.Data;
@@ -19,6 +20,8 @@ public class HeavyRain extends JavaPlugin {
 	private final String commandLabel = "heavyrain";
 	private final Config config = new Config(this);
 	private final CommandMain commands = new CommandMain(this);
+	private final Items items = new Items();
+	private final RecipesSetup recipesSetup = new RecipesSetup(this);
 	private final Logger logger = getLogger();
 
 	@Override
@@ -55,6 +58,7 @@ public class HeavyRain extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new ListenerCancel(this),this);
 		Bukkit.getPluginManager().registerEvents(new ListenerMobSpawn(this), this);
 		Bukkit.getPluginManager().registerEvents(new ListenerMob(this), this);
+		Bukkit.getPluginManager().registerEvents(new ListenerMobDeath(this), this);
 
 		// Scheduler timer
 		if(commands.isCounterEnabled()) {
@@ -83,7 +87,7 @@ public class HeavyRain extends JavaPlugin {
 	}
 	public void CommandsSetup(){
 		getCommand("heavyrain").setExecutor(commands);
-		getCommand("heavyrain").setTabCompleter(new TabCompleter());
+		getCommand("heavyrain").setTabCompleter(new TabCompleter(this));
 	}
 	public Config getConfigFile(){
 		return config;
@@ -93,5 +97,8 @@ public class HeavyRain extends JavaPlugin {
 	}
 	public CommandMain getCommands() {
 		return commands;
+	}
+	public Items getItems() {
+		return items;
 	}
 }
