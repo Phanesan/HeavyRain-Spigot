@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import tmlust.heavyrain.Entities;
 import tmlust.heavyrain.HeavyRain;
 import tmlust.heavyrain.utilities.Utility;
 
@@ -127,28 +128,8 @@ public class ListenerMobSpawn implements Listener {
             switch(e.getEntityType()) {
                 case ZOMBIE:
                     if(Utility.randomBoolean(40)) {
-                        // Tag
-                        e.getEntity().addScoreboardTag("zombie_arcane");
-
-                        // Equipment
-                        ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 9999*20, 1, false, false));
-                        ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 9999*20, 2, false, false));
-                        e.getEntity().setGlowing(true);
-
-                        ItemStack helmet = new ItemStack(Material.DIAMOND_HELMET);
-                        helmet.addEnchantment(Enchantment.PROTECTION_PROJECTILE, 3);
-
-                        ItemStack boots = new ItemStack(Material.GOLDEN_BOOTS);
-                        boots.addEnchantment(Enchantment.PROTECTION_PROJECTILE, 3);
-
-                        ItemStack sword = new ItemStack(Material.IRON_SWORD);
-
-                        ((Zombie) e.getEntity()).getEquipment().setArmorContents(new ItemStack[]{boots,null,null,helmet});
-                        ((Zombie) e.getEntity()).getEquipment().setItemInMainHand(sword);
-
-                        ((Zombie) e.getEntity()).getEquipment().setHelmetDropChance(0);
-                        ((Zombie) e.getEntity()).getEquipment().setBootsDropChance(0);
-                        ((Zombie) e.getEntity()).getEquipment().setItemInMainHandDropChance(0);
+                        e.setCancelled(true);
+                        Entities.spawnZombieArcane(e.getLocation());
                     }
                     break;
             }

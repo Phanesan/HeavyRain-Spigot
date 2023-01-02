@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.loot.LootContext;
 import tmlust.heavyrain.HeavyRain;
-import tmlust.heavyrain.loottables.ZombieArcane;
+import tmlust.heavyrain.loottables.ZombieArcaneLoot;
 
 import java.util.Random;
 
@@ -24,7 +24,7 @@ public class ListenerMobDeath implements Listener {
             switch(e.getEntityType()) {
                 case ZOMBIE:
                     if(e.getEntity().getScoreboardTags().contains("zombie_arcane")) {
-                        e.getDrops().addAll(new ZombieArcane(instance).populateLoot(new Random(), new LootContext.Builder(e.getEntity().getLocation())
+                        e.getDrops().addAll(new ZombieArcaneLoot(instance).populateLoot(new Random(), new LootContext.Builder(e.getEntity().getLocation())
                                 .lootedEntity(e.getEntity())
                                 .killer(e.getEntity().getKiller())
                                 .build()));

@@ -23,6 +23,9 @@ public class Items {
     public final ItemStack ArcaneBookLife;
     public final ItemStack KingSlimeCore;
 
+    /**
+     * Inicializa los items del plugin
+     */
     public Items(){
         listItem = new ArrayList<>();
 
@@ -33,6 +36,10 @@ public class Items {
         KingSlimeCore = initKingSlimeCore();
     }
 
+    /**
+     * Consigue la lista de los items
+     * @return una List con los nombres de los items
+     */
     public List<String> getListItem() {
         return listItem;
     }

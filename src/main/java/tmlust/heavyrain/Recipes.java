@@ -6,11 +6,11 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
-public class RecipesSetup {
+public class Recipes {
 
     private HeavyRain instance;
 
-    public RecipesSetup(HeavyRain instance) {
+    public Recipes(HeavyRain instance) {
         this.instance = instance;
         Bukkit.addRecipe(initCraftShardOfFire());
         Bukkit.addRecipe(initCraftArcaneBookLife());

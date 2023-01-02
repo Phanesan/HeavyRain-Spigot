@@ -21,7 +21,7 @@ public class HeavyRain extends JavaPlugin {
 	private final Config config = new Config(this);
 	private final CommandMain commands = new CommandMain(this);
 	private final Items items = new Items();
-	private final RecipesSetup recipesSetup = new RecipesSetup(this);
+	private final Recipes recipes = new Recipes(this);
 	private final Logger logger = getLogger();
 
 	@Override

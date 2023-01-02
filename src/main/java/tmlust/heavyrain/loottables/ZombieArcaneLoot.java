@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 
-public class ZombieArcane implements LootTable {
+public class ZombieArcaneLoot implements LootTable {
 
     private HeavyRain instance;
 
-    public ZombieArcane(HeavyRain instance) {
+    public ZombieArcaneLoot(HeavyRain instance) {
         this.instance = instance;
     }
 
