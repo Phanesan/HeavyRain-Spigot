@@ -1,9 +1,9 @@
-package tmlust.heavyrain.commands;
+package tmlust.heavyrain;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import tmlust.heavyrain.HeavyRain;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -16,7 +16,7 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
         this.instance = instance;
     }
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+    public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, String[] args) {
 
         if(args.length == 1) {
 

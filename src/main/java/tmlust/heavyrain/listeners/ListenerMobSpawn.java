@@ -1,19 +1,15 @@
 package tmlust.heavyrain.listeners;
 
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Monster;
-import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import tmlust.heavyrain.Entities;
 import tmlust.heavyrain.HeavyRain;
-import tmlust.heavyrain.utilities.Utility;
+import tmlust.heavyrain.utils.Utility;
 
 
 public class ListenerMobSpawn implements Listener {
@@ -26,7 +22,7 @@ public class ListenerMobSpawn implements Listener {
 
     @EventHandler
     public void onEntitySpawn(EntitySpawnEvent e) {
-        if(instance.getCommands().isHeavyRainActivated() && e.getEntity() instanceof Monster) {
+        if(instance.getData().isHeavyRainActivated() && e.getEntity() instanceof Monster) {
 
             e.getEntity().addScoreboardTag("heavyrain-mob");
 

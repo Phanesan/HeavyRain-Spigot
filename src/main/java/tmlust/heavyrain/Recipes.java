@@ -10,6 +10,10 @@ public class Recipes {
 
     private HeavyRain instance;
 
+    /**
+     * Inicializa las recetas
+     * @param instance Instancia del plugin
+     */
     public Recipes(HeavyRain instance) {
         this.instance = instance;
         Bukkit.addRecipe(initCraftShardOfFire());

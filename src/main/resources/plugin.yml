@@ -6,6 +6,3 @@ commands:
   heavyrain:
     description: "Despliega la lista de comandos"
     usage: /<command>
-  heavyraind:
-    description: "Comandos debug"
-    usage: /<command>

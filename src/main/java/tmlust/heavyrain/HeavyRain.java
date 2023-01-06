@@ -2,103 +2,101 @@ package tmlust.heavyrain;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import tmlust.heavyrain.commands.CommandMain;
-import tmlust.heavyrain.commands.TabCompleter;
 import tmlust.heavyrain.listeners.ListenerCancel;
 import tmlust.heavyrain.listeners.ListenerMobDeath;
 import tmlust.heavyrain.listeners.ListenerMobSpawn;
 import tmlust.heavyrain.files.Config;
-import tmlust.heavyrain.files.Data;
 import tmlust.heavyrain.listeners.ListenerMob;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 public class HeavyRain extends JavaPlugin {
-	private final String commandLabel = "heavyrain";
-	private final Config config = new Config(this);
-	private final CommandMain commands = new CommandMain(this);
-	private final Items items = new Items();
-	private final Recipes recipes = new Recipes(this);
-	private final Logger logger = getLogger();
+	private String commandLabel;
+	private Data data;
+	private Config config;
+	private Commands commands;
+	private Items items;
+	private Recipes recipes;
+	private Logger logger;
+	private ThreadManager threadManager;
 
 	@Override
 	public void onLoad() {
-		Data dat;
+		// Init Load
+		commandLabel = "heavyrain";
+		logger = getLogger();
+		config = new Config(this);
+		commands = new Commands(this);
+		items = new Items();
+		recipes = new Recipes(this);
+		threadManager = new ThreadManager(this);
+		data = new Data(this);
+
+		// Data load
 		try {
-			dat = Data.loadData(this, "/HeavyRainData.json");
-			if(dat != null){
-				commands.setCounterEnabled(dat.counterEnabled);
-				commands.setSecondsTimer(dat.secondsTimer);
-				commands.setSecondsMax(dat.secondsMax);
-				commands.setHeavyRainActivated(dat.HeavyRainActivated);
-				logger.info("Datos cargados con exito!");
-			}
+			data.insertData(Data.loadData(this, "/HeavyRainData.json"));
+			logger.info("Datos cargados con exito!");
 		} catch (FileNotFoundException e) {
 			logger.info("No se encontraron datos guardados, se cargaran los datos por defecto.");
-			commands.setCounterEnabled(false);
-			commands.setSecondsTimer(1);
-			commands.setSecondsMax(28800); // 8 horas
-			commands.setHeavyRainActivated(false);
+			data.createDataDefault();
 		}
 	}
 
 	@Override
 	public void onEnable() {
 
-		//Config setup
-		config.setup();
+		data.applyData();
 
-		//Commands setup
-		CommandsSetup();
+		CommandsInit();
 
-		// Listeners
-		Bukkit.getPluginManager().registerEvents(new ListenerCancel(this),this);
-		Bukkit.getPluginManager().registerEvents(new ListenerMobSpawn(this), this);
-		Bukkit.getPluginManager().registerEvents(new ListenerMob(this), this);
-		Bukkit.getPluginManager().registerEvents(new ListenerMobDeath(this), this);
+		ListenersInit();
 
-		// Scheduler timer
-		if(commands.isCounterEnabled()) {
-			commands.startTimer();
-		}
-		if(commands.isHeavyRainActivated()) {
-			Threads.startLoop(this);
-		}
 	}
 
 	@Override
 	public void onDisable() {
-		File file = new File(this.getDataFolder().getAbsolutePath() + "/HeavyRainData.json");
-		if(file.exists()) {
-			Data dat = new Data(commands.isCounterEnabled(), commands.getSecondsTimer(), commands.getSecondsMax(), commands.isHeavyRainActivated());
+		try {
+			data.saveData(this,"/HeavyRainData.json");
+		} catch (IOException e) {
+			logger.warning("Algo salio mal y no se pudieron guardar los datos, se cargaran los datos por defecto.");
+			data.createDataDefault();
+
 			try {
-				dat.saveData(this, "/HeavyRainData.json");
-			} catch (IOException e) {
-				throw new RuntimeException(e);
+				data.saveData(this,"/HeavyRainData.json");
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
 			}
 		}
 	}
 
-	public String getCommandLabel() {
-		return commandLabel;
-	}
-	public void CommandsSetup(){
+	public void CommandsInit(){
 		getCommand("heavyrain").setExecutor(commands);
 		getCommand("heavyrain").setTabCompleter(new TabCompleter(this));
+	}
+	public void ListenersInit() {
+		Bukkit.getPluginManager().registerEvents(new ListenerCancel(this),this);
+		Bukkit.getPluginManager().registerEvents(new ListenerMobSpawn(this), this);
+		Bukkit.getPluginManager().registerEvents(new ListenerMob(this), this);
+		Bukkit.getPluginManager().registerEvents(new ListenerMobDeath(this), this);
+	}
+	public Data getData() {
+		return data;
+	}
+	public String getCommandLabel() {
+		return commandLabel;
 	}
 	public Config getConfigFile(){
 		return config;
 	}
-	public Logger getLoggerPlugin() {
-		return logger;
-	}
-	public CommandMain getCommands() {
+	public Commands getCommands() {
 		return commands;
 	}
 	public Items getItems() {
 		return items;
+	}
+	public ThreadManager getThreadManager() {
+		return threadManager;
 	}
 }

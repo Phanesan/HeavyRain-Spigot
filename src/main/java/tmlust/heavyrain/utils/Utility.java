@@ -1,4 +1,4 @@
-package tmlust.heavyrain.utilities;
+package tmlust.heavyrain.utils;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ public abstract class Utility {
         return true;
     }
 
-    public static List<Player> getConfigWorldPlayers(HeavyRain plugin, String configString) throws RuntimeException {
+    public static List<Player> getConfigWorldPlayers(@Nonnull HeavyRain plugin, String configString) throws RuntimeException {
         World w = plugin.getServer().getWorld(plugin.getConfigFile().getConfigFile().getString(configString));
         if(w != null) {
             return w.getPlayers();
@@ -27,7 +27,7 @@ public abstract class Utility {
             throw new RuntimeException("Algo salio mal y no se encontro el mundo " + configString);
     }
 
-    public static List<Player> getConfigWorldsPlayers(HeavyRain plugin,
+    public static List<Player> getConfigWorldsPlayers(@Nonnull HeavyRain plugin,
                                                 String worldConfig,
                                                 String world_netherConfig,
                                                 String world_the_endConfig){

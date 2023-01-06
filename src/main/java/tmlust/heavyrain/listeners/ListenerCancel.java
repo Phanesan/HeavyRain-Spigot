@@ -16,7 +16,7 @@ public class ListenerCancel implements Listener {
 
     @EventHandler
     public void PlayerBedEnterEvent(PlayerBedEnterEvent e) {
-        if(instance.getCommands().isHeavyRainActivated()) {
+        if(instance.getData().isHeavyRainActivated()) {
             e.setCancelled(true);
             e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',"&cLos rayos te atormentan, no puedes dormir..."));
         }

@@ -21,7 +21,7 @@ public class ListenerMob implements Listener {
 
     @EventHandler
     public void onPlayerAttack(EntityDamageByEntityEvent e) {
-        if(instance.getCommands().isHeavyRainActivated() && e.getDamager() instanceof Player && (e.getEntity() instanceof Silverfish ||
+        if(instance.getData().isHeavyRainActivated() && e.getDamager() instanceof Player && (e.getEntity() instanceof Silverfish ||
                                                             e.getEntity() instanceof Endermite)) {
 
             ((Monster) e.getEntity()).addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 60, 1, false, false));

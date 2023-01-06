@@ -20,9 +20,7 @@ public class Config {
 
     public Config(HeavyRain plugin){
         this.plugin = plugin;
-    }
 
-    public void setup(){
         configFile = new File(plugin.getDataFolder(), "config.yml");
 
         if(!configFile.exists()){

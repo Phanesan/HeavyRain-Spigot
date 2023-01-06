@@ -3,16 +3,13 @@ package tmlust.heavyrain.tasks;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 import tmlust.heavyrain.HeavyRain;
-import tmlust.heavyrain.Threads;
-import tmlust.heavyrain.utilities.Utility;
+import tmlust.heavyrain.utils.Utility;
 
 import java.util.List;
 
 public class HeavyRainTask extends BukkitRunnable {
     HeavyRain instance;
-    BukkitTask loop;
 
     public HeavyRainTask(HeavyRain instance){
         this.instance = instance;
@@ -21,7 +18,7 @@ public class HeavyRainTask extends BukkitRunnable {
     @Override
     public void run() {
 
-        instance.getCommands().setHeavyRainActivated(true);
+        instance.getData().setHeavyRainActivated(true);
         Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "HEAVYRAIN INICIADA! ");
         List<Player> players = Utility.getConfigWorldsPlayers(instance,"heavyrain_world","heavyrain_world_nether","heavyrain_world_the_end");
 
@@ -41,7 +38,7 @@ public class HeavyRainTask extends BukkitRunnable {
             p.getWorld().strikeLightning(new Location(p.getWorld(),p.getLocation().getX(),p.getLocation().getY()+100,p.getLocation().getZ()));
         }
 
-        BukkitTask loop = Threads.startLoop(instance);
+        instance.getThreadManager().startLoop();
     }
 
 

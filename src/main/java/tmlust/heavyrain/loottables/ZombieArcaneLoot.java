@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
 import tmlust.heavyrain.HeavyRain;
-import tmlust.heavyrain.utilities.Utility;
+import tmlust.heavyrain.utils.Utility;
 
 import java.util.ArrayList;
 import java.util.Collection;

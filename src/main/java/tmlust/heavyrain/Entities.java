@@ -15,8 +15,8 @@ public abstract class Entities {
 
     /**
      * Spawnea un Zombie Arcano
-     * @param location El lugar donde spawneara
-     * @return la entidad spawneada
+     * @param location El lugar de spawneo
+     * @return Instancia de la entidad
      */
     public static Zombie spawnZombieArcane(Location location) {
         Entity entity = location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
