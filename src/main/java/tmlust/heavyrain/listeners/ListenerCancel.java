@@ -21,4 +21,5 @@ public class ListenerCancel implements Listener {
             e.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&',"&cLos rayos te atormentan, no puedes dormir..."));
         }
     }
+
 }
